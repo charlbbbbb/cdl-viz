@@ -51,11 +51,11 @@ df = df.sort_values(SELECTED_STATISTIC, ascending=False)
 
 max_df = df[['alias', 'abbrev', SELECTED_STATISTIC]].iloc[:PLAYER_COUNT].set_index('alias')
 min_df = df[['alias', 'abbrev', SELECTED_STATISTIC]].iloc[-PLAYER_COUNT:].set_index('alias')
+middle_row[0].dataframe(max_df.reset_index().style.format(precision=3).applymap(lambda x: cst.background_colour_team(x))
+                 .applymap(lambda x: cst.text_color_team(x)))
 middle_row[0].dataframe(min_df.reset_index().style.format(precision=3).applymap(lambda x: cst.background_colour_team(x))
                  .applymap(lambda x: cst.text_color_team(x)))
 
-middle_row[0].dataframe(max_df.reset_index().style.format(precision=3).applymap(lambda x: cst.background_colour_team(x))
-                 .applymap(lambda x: cst.text_color_team(x)))
 
 try:
     COMPUTED_FIGURE = plot_ranked(cst.THEME_FUNC_MAP[selected_theme], max_df, min_df, SELECTED_STATISTIC, True, PRIMARY_COLOUR, SECONDARY_COLOUR, TERTIARY_COLOUR)
