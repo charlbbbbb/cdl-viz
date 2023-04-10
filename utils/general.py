@@ -39,6 +39,8 @@ CDL_FULL_TEAM_NAMES = {'NY': 'New York Subliners',
            'SEA': 'Seattle Surge',
            'LDN': 'London Royal Ravens'}
 
+CDL_ABBREV_FROM_NAME = {CDL_FULL_TEAM_NAMES[team]: team for team in CDL_FULL_TEAM_NAMES}
+
 def read_matches(all=True, majors: list=None) -> pd.DataFrame:
     dfs = []
     matchIDs = pd.read_json('major_ids.json')
