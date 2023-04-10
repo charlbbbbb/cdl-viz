@@ -2,13 +2,14 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import utils.general as utils_gen
-import utils.further_variables as fv
-import utils.cdl_data_manipulation as cdl_dm
+os.system("python3 setup.py install --user")
+os.system("pip3 install utils==0.1.0")
 import io
 import os
 
-os.system("python3 setup.py install --user")
-os.system("pip3 install utils==0.1.0")
+import utils.further_variables as fv
+import utils.cdl_data_manipulation as cdl_dm
+
 
 SMALL_FIGURE_SIZE = (6, 4)
 NORMAL_FIGURE_SIZE = (10, 6)
