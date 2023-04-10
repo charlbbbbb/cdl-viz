@@ -4,4 +4,3 @@ cmake==3.26.1
 numpy==1.24.2
 pyarrow==11.0.0
 matplotlib==3.7.1
-utils==0.1
