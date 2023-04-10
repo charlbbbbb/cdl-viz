@@ -1,0 +1,6 @@
+pandas==1.5.3
+streamlit==1.21.0
+cmake==3.26.1
+numpy==1.24.2
+pyarrow==11.0.0
+matplotlib==3.7.1

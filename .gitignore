@@ -348,3 +348,13 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+#virtual environment
+venv
+
+# Setup
+*.egg-info
+
+# Streamlit
+build
+dist
