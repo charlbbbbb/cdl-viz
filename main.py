@@ -123,7 +123,7 @@ st.sidebar.title("Graph Custimisation")
 selected_theme = st.sidebar.radio('THEME', ['Light', 'Dark', 'Custom'])
 
 if selected_theme=='Custom':
-    PRIMARY_COLOUR = st.sidebar.color_picker(label='Primary Colour', help="Colour ofFigure Background\n(Double Click Color to Confirm)")
+    PRIMARY_COLOUR = st.sidebar.color_picker(label='Primary Colour', help="Colour of Figure Background\n(Double Click Color to Confirm)")
     SECONDARY_COLOUR = st.sidebar.color_picker(label="Secondary Colour", help="Colour of Individual Axis Backgrounds\n(Double Click Color to Confirm)")
     TERTIARY_COLOUR = st.sidebar.color_picker(label="TERTIARY Colour", help="Colour of Labels, Spines and Titles\n(Double Click Color to Confirm)")
 
