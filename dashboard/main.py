@@ -5,6 +5,10 @@ import utils.general as utils_gen
 import utils.further_variables as fv
 import utils.cdl_data_manipulation as cdl_dm
 import io
+import os
+
+os.system("python3 setup.py install --user")
+os.system("pip3 install utils==0.1.0")
 
 SMALL_FIGURE_SIZE = (6, 4)
 NORMAL_FIGURE_SIZE = (10, 6)
