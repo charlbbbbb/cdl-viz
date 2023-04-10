@@ -51,10 +51,10 @@ df = df.sort_values(SELECTED_STATISTIC, ascending=False)
 
 max_df = df[['alias', 'abbrev', SELECTED_STATISTIC]].iloc[:PLAYER_COUNT].set_index('alias')
 min_df = df[['alias', 'abbrev', SELECTED_STATISTIC]].iloc[-PLAYER_COUNT:].set_index('alias')
-middle_row[0].dataframe(min_df.style.format(precision=3).applymap(lambda x: cst.background_colour_team(x))
+middle_row[0].dataframe(min_df.style.format(precision=3).reset_index().applymap(lambda x: cst.background_colour_team(x))
                  .applymap(lambda x: cst.text_color_team(x)))
 
-middle_row[0].dataframe(max_df.style.format(precision=3).applymap(lambda x: cst.background_colour_team(x))
+middle_row[0].dataframe(max_df.style.format(precision=3).reset_index().applymap(lambda x: cst.background_colour_team(x))
                  .applymap(lambda x: cst.text_color_team(x)))
 
 try:
