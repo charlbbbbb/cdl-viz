@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import io
 import os
 os.system("python3 setup.py install --user")
-os.system("pip3 install utils==0.1.0")
-print("Utils Installed")
 import utils.general as utils_gen
 import utils.further_variables as fv
 import utils.cdl_data_manipulation as cdl_dm
