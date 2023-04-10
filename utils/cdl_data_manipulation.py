@@ -69,4 +69,26 @@ def get_head_to_head_player_stats(df: pd.DataFrame, team1: str, team2: str) -> p
 
     return pd.concat([t1_joined, t2_joined], axis=0)
 
+def top_overall(df: pd.DataFrame, min_maps):
+    needed_columns = ["alias", "abbrev", "totalKills", "totalDeaths", "totalDamageDealt", "damageTaken", "totalAssists", "untradedKills", "tradedDeaths",
+                       "untradedDeaths", "tradedKills", "bombsPlanted", "bombsDefused", "totalWallbangKills", "totalRotationKills", "totalFirstBloodKills",
+                       "totalDistanceTraveled", "mapsPlayed", "hillTime", "contestedHillTime", "lethalsUsed", "tacticalsUsed"]
+    df['mapsPlayed'] = 1
+    grouped = df.groupby(['alias', 'abbrev']).sum().reset_index()[needed_columns]
+    grouped = grouped[grouped['mapsPlayed']>=min_maps]
+
+    grouped['overallKD'] = grouped['totalKills']/grouped['totalDeaths']
+    grouped['firstBloodPerMap'] = grouped['totalFirstBloodKills']/grouped['mapsPlayed']
+    grouped['hillTimePerMap'] = grouped['hillTime']/grouped['mapsPlayed']
+    grouped['totalDamageDelta'] = grouped['totalDamageDealt']-grouped['damageTaken']
+    grouped['percentOfKillUntraded'] = grouped['untradedKills']/grouped['totalKills']
+    grouped['percentOfDeathsUntraded'] = grouped['untradedDeaths']/grouped['totalDeaths']
+    grouped['percentOfKillsTraded'] = grouped['tradedKills']/grouped['totalKills']
+    grouped['percentOfDeathsTraded'] = grouped['tradedDeaths']/grouped['totalDeaths']
+    grouped['totalDamagePerMap'] = grouped['totalDamageDealt']/grouped['mapsPlayed']
+    grouped['totalDistanceTraveledPerMap'] = grouped['totalDistanceTraveled']/grouped['mapsPlayed']
+
+    return grouped
+
+
 

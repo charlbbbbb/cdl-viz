@@ -5,109 +5,16 @@ import io
 import utils.general as utils_gen
 import utils.further_variables as fv
 import utils.cdl_data_manipulation as cdl_dm
+import utils.cdl_graph_plotting as cgp
+from utils.cdl_st_templates import light_theme, custom_theme, dark_theme, NORMAL_FIGURE_SIZE, THEME_FUNC_MAP, background_colour_team, text_color_team
 
-
-SMALL_FIGURE_SIZE = (6, 4)
-NORMAL_FIGURE_SIZE = (10, 6)
-LARGE_FIGURE_SIZE = (14, 10)
 
 CDL_PALLETE = utils_gen.CDL_PALETTE
 CDL_PALETTE_SECONDARY = utils_gen.CDL_PALETTE_SECONDARY
 CDL_FULL_TEAM_NAMES = utils_gen.CDL_FULL_TEAM_NAMES
-CDL_ABBREV_FROM_NAME = {CDL_FULL_TEAM_NAMES[team]: team for team in CDL_FULL_TEAM_NAMES}
+CDL_ABBREV_FROM_NAME = utils_gen.CDL_ABBREV_FROM_NAME
 
 st.set_page_config(layout="wide", page_title='Team Head-to-Head')
-
-######################################################################
-#                                                                    #
-#                           GRAPH THEMES                             #
-#                                                                    #
-######################################################################
-
-def dark_theme(figure: plt.figure, grid:bool=False) -> None:
-    for axis in figure.get_axes():
-
-        axis.tick_params(labelcolor='white', color='white')
-        axis.set_title(axis.title.get_text(), color='white')
-        axis.set_facecolor("#6b7787")
-        axis.spines[['right', 'top', 'left', 'bottom']].set_color('white')
-        axis.set_xlabel(axis.get_xlabel(), color='white')
-        axis.set_ylabel(axis.get_ylabel(), color='white')
-        if grid:
-            axis.grid(color='grey', alpha=0.75)
-
-        
-    figure.set_facecolor("#0c1222")
-    figure.suptitle(figure._suptitle.get_text(), color='white')
-
-
-def light_theme(figure: plt.figure, grid:bool=False) -> None:
-    for axis in figure.get_axes():
-
-        axis.tick_params(labelcolor='black', color='black')
-        axis.set_title(axis.title.get_text(), color='black')
-        axis.set_facecolor("white")
-        axis.spines[['right', 'top', 'left', 'bottom']].set_color('black')
-        if grid:
-            axis.grid(color='grey', alpha=0.75)
-        
-    figure.set_facecolor("#e6e1e1")
-    figure.suptitle(figure._suptitle.get_text(), color='black')
-
-
-def custom_theme(figure: plt.figure, grid:bool = False) -> None:
-    for axis in figure.get_axes():
-
-        axis.tick_params(labelcolor=TERTIARY_COLOUR, color=TERTIARY_COLOUR)
-        axis.set_title(axis.title.get_text(), color=TERTIARY_COLOUR)
-        axis.set_facecolor(SECONDARY_COLOUR)
-        axis.spines[['right', 'top', 'left', 'bottom']].set_color(TERTIARY_COLOUR)
-        axis.set_xlabel(axis.get_xlabel(), color=TERTIARY_COLOUR)
-        axis.set_ylabel(axis.get_ylabel(), color=TERTIARY_COLOUR)
-        if grid:
-            axis.grid(color=TERTIARY_COLOUR, alpha=0.75)
-        
-    figure.set_facecolor(PRIMARY_COLOUR)
-    figure.suptitle(figure._suptitle.get_text(), color=TERTIARY_COLOUR)
-
-def get_stack_size(base_size: tuple=NORMAL_FIGURE_SIZE, orientation: str='vertical', n: int=2) -> tuple[int, int]:
-    if orientation.lower() == 'vertical':
-        new_size = (base_size[0], base_size[1]*n)
-    elif orientation.lower() == 'horizontal':
-        new_size = (base_size[0]*n, base_size[1])
-    return new_size
-
-THEME_FUNC_MAP = {'Light': light_theme,
-                   'Dark': dark_theme,
-                   'Custom': custom_theme}
-
-
-######################################################################
-#                                                                    #
-#                           GRAPH PLOTTING                           #
-#                                                                    #
-######################################################################
-
-
-def plot_head_to_head(df, theme, selected_var):
-    fig = plt.figure(figsize=(NORMAL_FIGURE_SIZE))
-    axes = fig.subplots(nrows=2, sharey=True)
-    for team, ax in zip(df.abbrev.unique(), axes):
-        teamDF = df[df['abbrev']==team].dropna(axis=1, how='all')
-        teamDF.plot(kind='bar', stacked=False, x='alias', ax=ax, color=[CDL_PALLETE[teamDF['abbrev'][0]], CDL_PALETTE_SECONDARY[teamDF['abbrev'][0]]])
-        ax.set_title(f"{CDL_FULL_TEAM_NAMES[teamDF.abbrev[0]]}")
-        ax.tick_params(rotation=0)
-        ax.set_ylabel(selected_var)
-        ax.legend(loc='lower center')
-    
-    teams = df.abbrev.unique()
-    fig.suptitle(f"{teams[0]} vs {teams[1]} - {selected_var}")
-    fig.tight_layout()
-    theme(fig)
-    
-    return fig
-
-
 
 
 ######################################################################
@@ -155,6 +62,7 @@ df = df[df['gameMap'].isin(selected_maps)]
 #                       Grid Layout Creation                         #
 #                                                                    #
 ######################################################################
+
 (top_row, middle_row, bottom_row) = (st.columns(2) for i in range(3))
 
 
@@ -163,19 +71,6 @@ df = df[df['gameMap'].isin(selected_maps)]
 #                       DashBoard Plotting                           #
 #                                                                    #
 ######################################################################
-
-
-def background_colour_team(x):
-    try:
-        return f"background-color: {CDL_PALLETE[x]}"
-    except:
-        return None
-
-def text_color_team(x):
-    try:
-        return f"color: {CDL_PALETTE_SECONDARY[x]}"
-    except:
-        return None
 
 head_to_head = cdl_dm.get_head_to_head_player_stats(df, CDL_ABBREV_FROM_NAME[team1_selectbox], CDL_ABBREV_FROM_NAME[team2_selectbox])
 
@@ -188,9 +83,14 @@ middle_row[0].write(head_to_head[['alias', 'abbrev',
                                   .dropna(axis=0, how='all').reset_index(drop=True).style
                                   .format(precision=3).applymap(background_colour_team).applymap(text_color_team).background_gradient())
 
-h2h_figure = plot_head_to_head(head_to_head[['alias', 'abbrev', 
-                                  *[var for var in head_to_head.select_dtypes(exclude='object').columns if SELECTED_VARIABLE in var]]], THEME_FUNC_MAP[selected_theme],
-                                  SELECTED_VARIABLE)
+try:
+    h2h_figure = cgp.plot_head_to_head(head_to_head[['alias', 'abbrev', 
+                                    *[var for var in head_to_head.select_dtypes(exclude='object').columns if SELECTED_VARIABLE in var]]], THEME_FUNC_MAP[selected_theme],
+                                    SELECTED_VARIABLE, NORMAL_FIGURE_SIZE, PRIMARY_COLOUR, SECONDARY_COLOUR, TERTIARY_COLOUR)
+except NameError:
+    h2h_figure = cgp.plot_head_to_head(head_to_head[['alias', 'abbrev', 
+                                    *[var for var in head_to_head.select_dtypes(exclude='object').columns if SELECTED_VARIABLE in var]]], THEME_FUNC_MAP[selected_theme],
+                                    SELECTED_VARIABLE, NORMAL_FIGURE_SIZE)
 
 h2h_figure_data = io.BytesIO()
 h2h_figure.savefig(h2h_figure_data, format='png')
