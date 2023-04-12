@@ -70,6 +70,12 @@ def get_head_to_head_player_stats(df: pd.DataFrame, team1: str, team2: str) -> p
     return pd.concat([t1_joined, t2_joined], axis=0)
 
 def top_overall(df: pd.DataFrame, min_maps):
+    """
+    Desc: This function takes CDL data and groups it into overalls for each statistic (sums).
+          It then adds additional variables created from the pre-existing variables
+    Params:
+        min_maps (int) - The minimum number of maps that must be played to be included in the df
+    """
     needed_columns = ["alias", "abbrev", "totalKills", "totalDeaths", "totalDamageDealt", "damageTaken", "totalAssists", "untradedKills", "tradedDeaths",
                        "untradedDeaths", "tradedKills", "bombsPlanted", "bombsDefused", "totalWallbangKills", "totalRotationKills", "totalFirstBloodKills",
                        "totalDistanceTraveled", "mapsPlayed", "hillTime", "contestedHillTime", "lethalsUsed", "tacticalsUsed"]

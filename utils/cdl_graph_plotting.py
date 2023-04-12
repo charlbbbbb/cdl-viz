@@ -30,7 +30,20 @@ def plot_head_to_head(df: pd.DataFrame, theme, selected_var, figsize, col1=None,
     
     return fig
 
-def plot_ranked(theme, df_max: pd.DataFrame, df_min : pd.DataFrame, statistic: str, player_images: bool = True, col1=None, col2=None, col3=None) -> plt.figure:
+def plot_ranked(theme, df_max: pd.DataFrame, df_min : pd.DataFrame, statistic: str, player_images: bool = True, info=False, col1=None, col2=None, col3=None) -> plt.figure:
+    """
+    Desc: A function to plot the top and bottom x of a given statistic from a given dataframe
+    Params:
+        theme (function) - A function that formats the graph
+        df_max (df) - A dataframe for the top x
+        df_min (df) - A dataframe for the bottom x
+        statistic (string) - Name of variable to plot
+        player_images (boolean) - Whether or not to show player images
+        info (string) - Info to show on the plot e.g. what maps are selected
+        col1 - Primary colour
+        col2 - Secondary colour
+        col3 - Tertiary colour
+    """
     fig = plt.figure(figsize=get_stack_size(NORMAL_FIGURE_SIZE, 'vertical', n=2))
     ax1, ax2 = fig.subplots(nrows=2)
 
@@ -58,7 +71,7 @@ def plot_ranked(theme, df_max: pd.DataFrame, df_min : pd.DataFrame, statistic: s
             anno = AnnotationBbox(im_box, (x, ax2.get_ylim()[0]), frameon=False, box_alignment=(0.5, 0))
             ax2.add_artist(anno)
             
-    fig.suptitle(f"Top and Bottom {len(df_min)} Players - {statistic}")
+    fig.suptitle(f"Top and Bottom {len(df_min)} Players - {statistic}\n{info if info else ''}")
     if col1 != None:
         theme(col1, col2, col3, fig, False)
     else:

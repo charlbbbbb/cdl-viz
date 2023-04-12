@@ -1,6 +1,12 @@
 import streamlit as st
 import pandas as pd
 import io
+
+# Local Imports -
+# 'utils' need to be imported from an intermediate
+# file because streamlit does not execute the 
+# setup.py file
+
 from utils_link import utils
 from utils.general import read_matches
 import utils.cdl_data_manipulation as cdm
@@ -57,10 +63,12 @@ middle_row[0].dataframe(min_df.reset_index().style.format(precision=3).applymap(
                  .applymap(lambda x: cst.text_color_team(x)))
 
 
+FULL_SELECTION = f"\nMAPS: {selected_maps}\nbMODES: {selected_modes}\nEVENTS: {selected_events}\n"
+
 try:
-    COMPUTED_FIGURE = plot_ranked(cst.THEME_FUNC_MAP[selected_theme], max_df, min_df, SELECTED_STATISTIC, True, PRIMARY_COLOUR, SECONDARY_COLOUR, TERTIARY_COLOUR)
+    COMPUTED_FIGURE = plot_ranked(cst.THEME_FUNC_MAP[selected_theme], max_df, min_df, SELECTED_STATISTIC, True, FULL_SELECTION, PRIMARY_COLOUR, SECONDARY_COLOUR, TERTIARY_COLOUR)
 except NameError:
-    COMPUTED_FIGURE = plot_ranked(cst.THEME_FUNC_MAP[selected_theme], max_df, min_df, SELECTED_STATISTIC)
+    COMPUTED_FIGURE = plot_ranked(cst.THEME_FUNC_MAP[selected_theme], max_df, min_df, SELECTED_STATISTIC, True, FULL_SELECTION)
                               
 top_bottom_fig = io.BytesIO()
 COMPUTED_FIGURE.savefig(top_bottom_fig, format='png')
